@@ -40,7 +40,7 @@ export const Home = () => {
       tabBarOptions={{
         showLabel: false,
       }}
-      initialRouteName="Inicio"
+      initialRouteName="Dashboard"
     >
       <Screen name="Dashboard" component={DashBoardScreen} />
       <Screen name="Inicio" component={HomeScreen} />

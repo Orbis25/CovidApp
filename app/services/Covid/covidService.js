@@ -18,4 +18,8 @@ export default class CovidService {
   async getCountryState(country) {
     return await this.axios.get(`${this.url}/live/country/${country}`);
   }
+
+  async getTotal() {
+    return await this.axios.get(`${this.url}/world/total`);
+  }
 }

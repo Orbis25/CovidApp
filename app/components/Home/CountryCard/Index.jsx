@@ -5,6 +5,8 @@ import { StyleSheet, View } from "react-native";
 import { primary, hint } from "../../../utils/colors.json";
 import { render } from "react-dom";
 class CardItem extends PureComponent {
+
+  
   render() {
     const { country, day } = this.props;
     const {

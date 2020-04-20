@@ -3,12 +3,14 @@ import { View, StyleSheet, FlatList } from "react-native";
 import { Spinner, Text } from "@ui-kitten/components";
 import Service from "../../services/Covid/covidService";
 import CardItem from "../../components/Home/CountryCard/Index";
-const HomeScreen = () => {
+const HomeScreen = (props) => {
   const [data, setData] = useState([]);
+  const [list, setList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-
+  const [actualPage, setActualPage] = useState(1);
   useEffect(() => {
     getData();
+    paginate(1);
   }, []);
 
   const getData = () => {
@@ -22,6 +24,20 @@ const HomeScreen = () => {
       .finally(() => setIsLoading(false));
   };
 
+  const paginate = (pageSize) => {
+    const result = data.slice(
+      (actualPage - 1) * pageSize,
+      actualPage * pageSize
+    );
+    let page = actualPage + 1;
+    setActualPage(page);
+    if (actualPage > 1) {
+      setList((prevState) => prevState.concat(result));
+    } else {
+      setList(result);
+    }
+  };
+
   return (
     <View style={styles.container}>
       {isLoading ? (
@@ -33,7 +49,12 @@ const HomeScreen = () => {
         </View>
       ) : (
         <FlatList
-          data={data}
+          data={list}
+          removeClippedSubviews={true}
+          maxToRenderPerBatch={1}
+          initialNumToRender={1}
+          onEndReachedThreshold={0.1}
+          onEndReached={() => paginate(3)}
           renderItem={(country) => (
             <View style={styles.containerCard}>
               <CardItem
@@ -68,11 +89,6 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   spinerContainer: {
-    // alignContent:'center',
-    // alignItems:'center',
-    // borderRadius: 4,
-    // padding: 12,
-    // backgroundColor: "#3366FF",
     alignItems: "center",
     alignContent: "center",
     alignSelf: "center",
