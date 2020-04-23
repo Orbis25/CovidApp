@@ -5,24 +5,49 @@ import Service from "../../services/Covid/covidService";
 import CardItem from "../../components/Home/CountryCard/Index";
 const HomeScreen = (props) => {
   const [data, setData] = useState([]);
-  const [list, setList] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [actualPage, setActualPage] = useState(1);
-  useEffect(() => {
-    getData();
-    paginate(1);
-  }, []);
 
-  const getData = () => {
-    setIsLoading(true);
-    new Service()
-      .getAllData()
+  useEffect(() => {
+    getData()
       .then((response) => {
         setData(response.data.Countries);
       })
-      .catch((err) => {})
-      .finally(() => setIsLoading(false));
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
+  const getData = () => {
+    return new Service().getAllData();
   };
+
+  return (
+    <View style={styles.container}>
+      {data.length <= 0 ? (
+        <View style={styles.spinerContainer}>
+          <Spinner size="giant" />
+          <Text
+            onPress={() => paginate(3)}
+            style={{ marginTop: 30 }}
+            category="h3"
+          >
+            Espere un momento...
+          </Text>
+        </View>
+      ) : (
+        <ListCountry data={data} />
+      )}
+    </View>
+  );
+};
+
+const ListCountry = (props) => {
+  const { data } = props;
+  const [list, setList] = useState([]);
+  const [actualPage, setActualPage] = useState(1);
+
+  useEffect(() => {
+    paginate(3);
+  }, []);
 
   const paginate = (pageSize) => {
     const result = data.slice(
@@ -39,40 +64,27 @@ const HomeScreen = (props) => {
   };
 
   return (
-    <View style={styles.container}>
-      {isLoading ? (
-        <View style={styles.spinerContainer}>
-          <Spinner size="giant" />
-          <Text style={{ marginTop: 30 }} category="h3">
-            Espere un momento...
-          </Text>
-        </View>
-      ) : (
-        <FlatList
-          data={list}
-          removeClippedSubviews={true}
-          maxToRenderPerBatch={1}
-          initialNumToRender={1}
-          onEndReachedThreshold={0.1}
-          onEndReached={() => paginate(3)}
-          renderItem={(country) => (
-            <View style={styles.containerCard}>
-              <CardItem
-                country={country}
-                day={country.item.Date}
-                style={styles.card}
-              />
-            </View>
-          )}
-          keyExtractor={(item, index) => index.toString()}
-          ListFooterComponent={
-            <View style={{ alignItems: "center" }}>
-              <Spinner />
-            </View>
-          }
+    <FlatList
+      data={list}
+      removeClippedSubviews={true}
+      maxToRenderPerBatch={4}
+      initialNumToRender={4}
+      onEndReachedThreshold={0.1}
+      onEndReached={() => paginate(3)}
+      renderItem={(country) => (
+        <CardItem
+          country={country}
+          day={country.item.Date}
+          style={styles.card}
         />
       )}
-    </View>
+      keyExtractor={(item, index) => index.toString()}
+      ListFooterComponent={
+        <View style={{ alignItems: "center" }}>
+          <Spinner />
+        </View>
+      }
+    />
   );
 };
 

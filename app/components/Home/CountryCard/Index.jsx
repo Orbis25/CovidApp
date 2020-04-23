@@ -3,10 +3,7 @@ import { Card, Text, Layout } from "@ui-kitten/components";
 import { MaterialIcons } from "@expo/vector-icons";
 import { StyleSheet, View } from "react-native";
 import { primary, hint } from "../../../utils/colors.json";
-import { render } from "react-dom";
 class CardItem extends PureComponent {
-
-  
   render() {
     const { country, day } = this.props;
     const {
@@ -27,8 +24,8 @@ class CardItem extends PureComponent {
 
     const Header = () => {
       return (
-        <Layout style={styles.header}>
-          <Layout style={styles.containerTitle}>
+        <View style={styles.header}>
+          <View style={styles.containerTitle}>
             <MaterialIcons name="public" style={styles.iconTop} />
             <Text
               style={{
@@ -41,9 +38,9 @@ class CardItem extends PureComponent {
             >
               {Country}
             </Text>
-          </Layout>
+          </View>
           <Text style={styles.textDate}>{formatDate(day)}</Text>
-        </Layout>
+        </View>
       );
     };
 
@@ -86,7 +83,11 @@ class CardItem extends PureComponent {
 
 const styles = StyleSheet.create({
   card: {
-    top: 0,
+    marginTop: 10,
+    marginBottom: 10,
+    borderRadius: 4,
+    marginLeft: 10,
+    marginRight: 10,
   },
   header: {},
   textHeader: {
