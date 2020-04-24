@@ -1,9 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, View, Text, AsyncStorage, Image } from "react-native";
+import {
+  StyleSheet,
+  View,
+  Text,
+  AsyncStorage,
+  Image,
+  ScrollView,
+  TouchableOpacity,
+} from "react-native";
 import { Spinner } from "@ui-kitten/components";
 import Service from "../../services/Covid/covidService";
 import CardItem from "../../components/shared/Card/Index";
-import { hint } from "../../utils/colors.json";
+import { hint, primary } from "../../utils/colors.json";
+import { MaterialIcons } from "@expo/vector-icons";
 
 const Word = () => {
   const [data, setData] = useState(null);
@@ -20,32 +29,48 @@ const Word = () => {
       });
     });
   };
+  const reloadData = () => {
+    setData([]);
+    getData();
+  };
   return (
     <View style={styles.view}>
-      <Text style={styles.title}>Estado mundial</Text>
+      <View style={styles.containerTitle}>
+        <Text style={styles.title}>Estado General</Text>
+        <TouchableOpacity onPress={reloadData}>
+          <MaterialIcons
+            name="cached"
+            color={primary}
+            style={{ marginTop: 16 }}
+            size={31}
+          />
+        </TouchableOpacity>
+      </View>
       <View style={styles.imageContainer}>
         <Image
           style={styles.image}
-          source={require("../../../assets/Dashboard/temperature.png")}
+          source={require("../../../assets/Dashboard/temperature.gif")}
           resizeMode="cover"
         />
       </View>
       {data !== null ? (
-        <View style={{ flex: 1 }}>
-          <View style={styles.summary}>
-            <View style={styles.card}>
-              <CardItem title="Confirmados" quantity={data.TotalConfirmed} />
+        <ScrollView>
+          <View style={{ flex: 1 }}>
+            <View style={styles.summary}>
+              <View style={styles.card}>
+                <CardItem title="Confirmados" quantity={data.TotalConfirmed} />
+              </View>
+            </View>
+            <View style={styles.summary}>
+              <View style={styles.card}>
+                <CardItem title="Activos" quantity={data.TotalDeaths} />
+              </View>
+              <View style={styles.card}>
+                <CardItem title="Recuperados" quantity={data.TotalRecovered} />
+              </View>
             </View>
           </View>
-          <View style={styles.summary}>
-            <View style={styles.card}>
-              <CardItem title="Activos" quantity={data.TotalDeaths} />
-            </View>
-            <View style={styles.card}>
-              <CardItem title="Recuperados" quantity={data.TotalRecovered} />
-            </View>
-          </View>
-        </View>
+        </ScrollView>
       ) : (
         <View style={styles.spinerContainer}>
           <Spinner size="giant" />
@@ -67,13 +92,17 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-around",
   },
+  containerTitle: {
+    flexDirection: "row",
+    justifyContent: "space-evenly",
+  },
   title: {
-    textAlign: "center",
     fontSize: 17,
     color: hint,
     marginTop: 20,
     marginBottom: 20,
     fontWeight: "bold",
+    // marginLeft: 70,
   },
   image: {
     width: 146,

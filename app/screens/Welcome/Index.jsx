@@ -1,6 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { View, StyleSheet, Image, AsyncStorage } from "react-native";
-import ViewPager from "@react-native-community/viewpager";
+
+import {
+  IndicatorViewPager,
+  PagerDotIndicator,
+} from "react-native-best-viewpager";
+
 import {
   Text,
   Select,
@@ -14,7 +19,6 @@ import Service from "../../services/Covid/covidService";
 const Welcome = (props) => {
   const { navigation } = props;
   useEffect(() => {
-    //AsyncStorage.removeItem("country").then(() => {});
     getData();
   }, []);
 
@@ -28,47 +32,53 @@ const Welcome = (props) => {
     } catch (error) {}
   };
 
+  const renderDotIndicator = () => {
+    return (
+      <PagerDotIndicator
+        dotStyle={styles.dotStyle}
+        selectedDotStyle={styles.selectedDotStyle}
+        style={{
+          backgroundColor: "#fff",
+        }}
+        pageCount={3}
+      />
+    );
+  };
+
   return (
-    <ViewPager showPageIndicator style={{ flex: 1 }} initialPage={0}>
-      <View style={styles.pages} key="1">
+    <IndicatorViewPager indicator={renderDotIndicator()} style={{ flex: 1 }}>
+      <View style={styles.pages}>
         <Image
           resizeMode="cover"
           style={styles.image}
-          source={require("../../../assets/Welcome/wash-hand.png")}
+          source={require("../../../assets/Welcome/hands.gif")}
         />
-        <OnePage />
+        <Text style={styles.welcomeText} category="h5">
+          Bienvenido a la App
+        </Text>
+        <Text style={styles.welcomeText} appearance="hint">
+          Recuerda siempre lavarte las manos de manera correcta.
+        </Text>
       </View>
-      <View style={styles.pages} key="2">
+      <View style={styles.pages}>
         <Image
           resizeMode="cover"
           style={styles.image}
-          source={require("../../../assets/Welcome/sanitizer.png")}
+          source={require("../../../assets/Welcome/sanitizer.gif")}
         />
         <PageTwo />
       </View>
-      <View style={styles.pages} key="3">
+      <View style={styles.pages}>
         <Image
           resizeMode="cover"
           style={styles.image}
-          source={require("../../../assets/Welcome/mask.png")}
+          source={require("../../../assets/Welcome/mask.gif")}
         />
         <LastPage navigation={navigation} />
       </View>
-    </ViewPager>
+    </IndicatorViewPager>
   );
 };
-
-const OnePage = () => (
-  <View>
-    <Text style={styles.welcomeText} category="h5">
-      Bienvenido a la App
-    </Text>
-    <Text style={styles.welcomeText} appearance="hint">
-      Recuerda siempre lavarte las manos de manera correcta.
-    </Text>
-  </View>
-);
-
 const PageTwo = () => (
   <View>
     <Text style={styles.welcomeText} appearance="hint">
@@ -181,6 +191,20 @@ const styles = StyleSheet.create({
   },
   spinner: {
     marginTop: 30,
+  },
+  dotStyle: {
+    marginTop: -150,
+    width: 10,
+    borderRadius: 100,
+    height: 10,
+    backgroundColor: "#D1D1D1",
+  },
+  selectedDotStyle: {
+    marginTop: -150,
+    width: 10,
+    borderRadius: 100,
+    height: 10,
+    backgroundColor: "#A6BCD0",
   },
 });
 

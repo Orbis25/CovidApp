@@ -20,7 +20,7 @@ const Search = () => {
         <Image
           style={styles.image}
           resizeMode="cover"
-          source={require("../../../assets/covid.png")}
+          source={require("../../../assets/covid19.gif")}
         />
       </View>
     </View>

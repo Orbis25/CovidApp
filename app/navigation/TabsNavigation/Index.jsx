@@ -16,7 +16,7 @@ const TabIcons = (props) => {
     iconName = "home";
   } else if (route.name === "Dashboard") {
     iconName = "dashboard";
-  } else if (route.name === "Word") {
+  } else if (route.name === "Nivel Mundial") {
     iconName = "public";
   } else {
     iconName = "search";
@@ -44,8 +44,8 @@ export const Home = () => {
     >
       <Screen name="Dashboard" component={DashBoardScreen} />
       <Screen name="Inicio" component={HomeScreen} />
-      <Screen name="Word" component={WordScreen} />
-      <Screen name="Search" component={SearchScreen} />
+      <Screen name="Nivel Mundial" component={WordScreen} />
+      <Screen name="Busqueda" component={SearchScreen} />
     </Navigator>
   );
 };
